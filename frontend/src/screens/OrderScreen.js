@@ -10,13 +10,15 @@ const OrderScreen = ({ match }) => {
   const dispatch = useDispatch();
   const orderId = match.params.id;
 
-  useEffect(() => {
-    dispatch(getOrderDetails(orderId));
-  }, [dispatch, orderId]);
-
   const orderDetails = useSelector((state) => state.orderDetails);
 
   const { order, loading, error } = orderDetails;
+
+  useEffect(() => {
+    if (!order || order._id !== orderId) {
+      dispatch(getOrderDetails(orderId));
+    }
+  }, [dispatch, order, orderId]);
 
   if (!loading) {
     const addDecimals = (num) => {
@@ -54,11 +56,25 @@ const OrderScreen = ({ match }) => {
                 {order.shippingAddress.postalCode}{' '}
                 {order.shippingAddress.country}
               </p>
+              {order.isDelivered ? (
+                <Message variant="success">
+                  Delivered On {order.deliveredAt}
+                </Message>
+              ) : (
+                <Message variant="danger">Not Delivered</Message>
+              )}
             </ListGroup.Item>
             <ListGroup.Item>
               <h2>Payment Method</h2>
-              <strong>Method: </strong>
-              {order.paymentMethod}
+              <p>
+                <strong>Method: </strong>
+                {order.paymentMethod}
+              </p>
+              {order.isPayid ? (
+                <Message variant="success">Paid On {order.paidAt}</Message>
+              ) : (
+                <Message variant="danger">Not Paid</Message>
+              )}
             </ListGroup.Item>
             <ListGroup.Item>
               <h2>Order Items</h2>
