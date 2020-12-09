@@ -102,7 +102,7 @@ export const orderListMyReducer = (state = { orders: [] }, action) => {
         loading: false,
       };
     case ORDER_LIST_MY_RESET:
-      return { order: [] };
+      return { orders: [] };
     default:
       return state;
   }
