@@ -50,12 +50,10 @@ const updateProduct = asyncHandler(async (req, res) => {
   const {
     name,
     price,
-    user,
     image,
     brand,
     category,
     countInStock,
-    numReviews,
     description,
   } = req.body;
 
@@ -64,12 +62,10 @@ const updateProduct = asyncHandler(async (req, res) => {
   if (product) {
     product.name = name;
     product.price = price;
-    product.user = user;
     product.image = image;
     product.brand = brand;
     product.category = category;
     product.countInStock = countInStock;
-    product.numReviews = numReviews;
     product.description = description;
 
     const updatedProduct = await product.save();
