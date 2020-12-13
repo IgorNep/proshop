@@ -1,24 +1,35 @@
 import React, { useEffect } from 'react';
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrderDetails } from '../actions/orderActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import { ORDER_DELIVER_RESET } from '../constants/orderConstants';
+import { deliverOrder } from '../actions/orderActions';
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match, history }) => {
   const dispatch = useDispatch();
   const orderId = match.params.id;
 
   const orderDetails = useSelector((state) => state.orderDetails);
-
   const { order, loading, error } = orderDetails;
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
   useEffect(() => {
-    if (!order || order._id !== orderId) {
+    if (!userInfo) {
+      history.push('/login');
+    }
+    if (!order || order._id !== orderId || successDeliver) {
+      dispatch({ type: ORDER_DELIVER_RESET });
       dispatch(getOrderDetails(orderId));
     }
-  }, [dispatch, order, orderId]);
+  }, [dispatch, order, orderId, successDeliver, history, userInfo]);
 
   if (!loading) {
     const addDecimals = (num) => {
@@ -29,6 +40,10 @@ const OrderScreen = ({ match }) => {
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     );
   }
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
+  };
 
   return loading ? (
     <Loader />
@@ -58,7 +73,7 @@ const OrderScreen = ({ match }) => {
               </p>
               {order.isDelivered ? (
                 <Message variant="success">
-                  Delivered On {order.deliveredAt}
+                  Delivered On {order.deliveredAt.substring(0, 10)}
                 </Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
@@ -140,6 +155,67 @@ const OrderScreen = ({ match }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              <ListGroup.Item>
+                <form
+                  method="POST"
+                  accept-charset="utf-8"
+                  action="https://www.liqpay.ua/api/3/checkout"
+                >
+                  <input
+                    type="hidden"
+                    name="data"
+                    value="eyJ2ZXJzaW9uIjozLCJhY3Rpb24iOiJwYXkiLCJhbW91bnQiOjUsImN1cnJlbmN5IjoiVUFIIiwiZGVzY3JpcHRpb24iOiLQnNGW0Lkg0YLQvtCy0LDRgCIsInB1YmxpY19rZXkiOiJpMzI4NDIyNTgwMzkiLCJsYW5ndWFnZSI6InJ1In0="
+                  />
+                  <input
+                    type="hidden"
+                    name="signature"
+                    value="pn+0kn0Yv/Lpoo1DvAjttHd245c="
+                  />
+                  <button
+                    className="btn btn-block"
+                    style={{
+                      border: 'none !important',
+                      display: 'inline-block !important',
+                      'text-align': 'center !important',
+                      padding: '7px 20px !important',
+                      color: '#fff ',
+                      'font-size': '16px !important',
+                      'font-weight': '600 !important',
+                      'font-family': 'OpenSans, sans-serif',
+                      cursor: ' pointer !important',
+                      'border-radius': '2px !important',
+                      background: 'black',
+                    }}
+                    onmouseover="this.style.opacity='0.5';"
+                    onmouseout="this.style.opacity='1';"
+                  >
+                    <img
+                      src={'https://static.liqpay.ua/buttons/logo-small.png'}
+                      name="btn_text"
+                      style={{
+                        'margin-right': '7px !important',
+                        'vertical-align': 'middle !important',
+                      }}
+                      alt="paybutton"
+                    />{' '}
+                    <span style={{ 'vertical-align': 'middle !important' }}>
+                      {`Оплатить $${order.totalPrice}`}
+                    </span>
+                  </button>
+                </form>
+              </ListGroup.Item>
+              {loadingDeliver && <Loader />}
+              {userInfo && userInfo.isAdmin && !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={deliverHandler}
+                  >
+                    Mark As Delivered
+                  </Button>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>

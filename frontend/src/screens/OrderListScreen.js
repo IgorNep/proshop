@@ -59,7 +59,7 @@ const OrderListScreen = ({ history }) => {
                 </td>
                 <td>
                   {order.isDelivered ? (
-                    order.deliverAt.substring(0, 10)
+                    order.deliveredAt.substring(0, 10)
                   ) : (
                     <i className="fa fa-times" style={{ color: 'red' }}></i>
                   )}
