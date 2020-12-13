@@ -45,7 +45,7 @@ export const productListReducer = (state = { products: [] }, action) => {
 };
 
 export const productDetailsReducer = (
-  state = { product: { numReviews: [] } },
+  state = { product: { numReviews: [] }, loading: true },
   action
 ) => {
   switch (action.type) {
