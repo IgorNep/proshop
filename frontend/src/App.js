@@ -34,6 +34,11 @@ const App = () => {
             <Route path="/register" component={RegisterScreen} />
             <Route path="/login" component={LoginScreen} />
             <Route path="/search/:keyword" component={HomeScreen} />
+            <Route
+              path="/search/:keyword/page/:pageNumber"
+              component={HomeScreen}
+            />
+            <Route path="/page/:pageNumber" component={HomeScreen} />
             <Route exact path="/product/:id" component={ProductScreen} />
             <Route
               exact

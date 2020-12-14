@@ -19,6 +19,7 @@ const Header = () => {
           <LinkContainer to="/">
             <Navbar.Brand>Pro-Shop</Navbar.Brand>
           </LinkContainer>
+          <Route render={({ history }) => <SearchBox history={history} />} />
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
@@ -58,7 +59,6 @@ const Header = () => {
               )}
             </Nav>
           </Navbar.Collapse>
-          <Route render={({ history }) => <SearchBox history={history} />} />
         </Container>
       </Navbar>
     </header>

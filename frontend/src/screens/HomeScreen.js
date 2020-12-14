@@ -8,6 +8,7 @@ import Message from '../components/Message';
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword;
+  const pageNumber = match.params.pageNumber || 1;
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productList);
@@ -15,8 +16,8 @@ const HomeScreen = ({ match }) => {
   const { loading, products, error } = productList;
 
   useEffect(() => {
-    dispatch(listProducts(keyword));
-  }, [dispatch, keyword]);
+    dispatch(listProducts(keyword, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
   return (
     <Fragment>
       <h1>Latest Product</h1>
