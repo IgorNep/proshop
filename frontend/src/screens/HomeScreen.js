@@ -6,7 +6,8 @@ import { listProducts } from '../actions/productActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
+  const keyword = match.params.keyword;
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productList);
@@ -14,8 +15,8 @@ const HomeScreen = () => {
   const { loading, products, error } = productList;
 
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts(keyword));
+  }, [dispatch, keyword]);
   return (
     <Fragment>
       <h1>Latest Product</h1>

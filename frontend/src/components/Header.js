@@ -3,6 +3,8 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { logout } from '../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
+import SearchBox from './SearchBox';
+import { Route } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -56,6 +58,7 @@ const Header = () => {
               )}
             </Nav>
           </Navbar.Collapse>
+          <Route render={({ history }) => <SearchBox history={history} />} />
         </Container>
       </Navbar>
     </header>
