@@ -18,6 +18,7 @@ import {
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 
 const ProductScreen = ({ match, history }) => {
   const [qty, setQty] = useState(1);
@@ -66,6 +67,7 @@ const ProductScreen = ({ match, history }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <Fragment>
+          <Meta title={product.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />

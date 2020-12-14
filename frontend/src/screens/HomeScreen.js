@@ -7,6 +7,8 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
+import Meta from '../components/Meta';
+import { Helmet } from 'react-helmet';
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword;
@@ -29,6 +31,7 @@ const HomeScreen = ({ match }) => {
         <Message />
       ) : (
         <>
+          <Meta />
           {!keyword && <ProductCarousel />}
           <Row>
             {products.map((product) => (
