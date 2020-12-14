@@ -33,7 +33,7 @@ const App = () => {
             <Route path="/profile" component={ProfileScreen} />
             <Route path="/register" component={RegisterScreen} />
             <Route path="/login" component={LoginScreen} />
-            <Route path="/search/:keyword" component={HomeScreen} />
+            <Route exact path="/search/:keyword" component={HomeScreen} />
             <Route
               path="/search/:keyword/page/:pageNumber"
               component={HomeScreen}
@@ -43,6 +43,11 @@ const App = () => {
             <Route
               exact
               path="/admin/productlist"
+              component={ProductListScreen}
+            />
+            <Route
+              exact
+              path="/admin/productlist/:pageNumber"
               component={ProductListScreen}
             />
             <Route exact path="/admin/orderlist" component={OrderListScreen} />
