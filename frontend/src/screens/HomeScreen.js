@@ -8,7 +8,7 @@ import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
 import Meta from '../components/Meta';
-import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword;
@@ -32,7 +32,13 @@ const HomeScreen = ({ match }) => {
       ) : (
         <>
           <Meta />
-          {!keyword && <ProductCarousel />}
+          {!keyword ? (
+            <ProductCarousel />
+          ) : (
+            <Link to="/" className="btn btn-light">
+              Go Back
+            </Link>
+          )}
           <Row>
             {products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
